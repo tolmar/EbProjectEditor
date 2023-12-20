@@ -140,6 +140,9 @@ public class MapEditor extends ToolModule implements ActionListener,
 		radioButton.setAccelerator(KeyStroke.getKeyStroke("F8"));
 		radioButton.setSelected(true);
 		radioButton.setActionCommand("modeteleport");
+		radioButton.addActionListener(this);
+		group.add(radioButton);
+		modeMenu.add(radioButton);
 		radioButton = new JRadioButtonMenuItem("Custom Sector Edit");
 		radioButton.setAccelerator(KeyStroke.getKeyStroke("F9"));
 		radioButton.setSelected(true);
@@ -709,9 +712,9 @@ public class MapEditor extends ToolModule implements ActionListener,
 		} else if (e.getActionCommand().equals("mode8")) {
 			setMode(MapMode.VIEW_ALL);
 		} else if (e.getActionCommand().equals("mode9")) {
-      setMode(MapMode.PREVIEW)
-    } else if (e.getActionCommand().equals("modeteleport")) {
-      setMode(MapMode.TELEPORT);
+      		setMode(MapMode.PREVIEW);
+		} else if (e.getActionCommand().equals("modeteleport")) {
+		   setMode(MapMode.TELEPORT);
 		} else if (e.getActionCommand().equals("modecustom")) {
 			setMode(MapMode.CUSTOM_SECTOR);
 		} else if (e.getActionCommand().equals("delAllSprites")) {

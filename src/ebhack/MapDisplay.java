@@ -1337,7 +1337,7 @@ public class MapDisplay extends AbstractButton implements
             tileX = Math.max(0, tileX);
             tileY = Math.max(0, tileY);
             tileX = Math.min(MapData.WIDTH_IN_TILES * 4 - 1, tileX);
-            tileY = Math.min(MapData.HEIGHT_IN_TILES * 4 - 1, tileY);
+            tileY = Math.min(map.getHeightInTiles() * 4 - 1, tileY);
             movingTeleport.x = tileX;
             movingTeleport.y = tileY;
             repaint();
