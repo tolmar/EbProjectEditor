@@ -70,6 +70,7 @@ public class MapData {
         enemyGroups.clear();
         enemyOverworldSprites.clear();
         enemySpriteImages.clear();
+        customSectorData.clear();
     }
 
     public void load(Project proj) {
