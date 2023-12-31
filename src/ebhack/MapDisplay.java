@@ -249,21 +249,35 @@ public class MapDisplay extends AbstractButton implements
         // Zoom zoom
         g.scale(zoom, zoom);
 
-        MapData.Sector sector;
-        int pal;
+        // Find the tileset the mouse is in (for TV Preview Mode)
+        MapData.Sector mouseSector = map.getSector(
+                (int) ((scrollX + lastMouseX / zoom) / MapData.SECTOR_WIDTH_IN_PIXELS),
+                (int) ((scrollY + lastMouseY / zoom) / MapData.SECTOR_HEIGHT_IN_PIXELS));
+
+        // Draw tiles
         for (int iy = 0; iy < screenHeight; iy++) {
             for (int ix = 0; ix < screenWidth; ix++) {
-                sector = map.getSector((ix + screenX) / MapData.SECTOR_WIDTH,
+                MapData.Sector sector = map.getSector((ix + screenX) / MapData.SECTOR_WIDTH,
                         (iy + screenY) / MapData.SECTOR_HEIGHT);
-                pal = TileEditor.tilesets[TileEditor
+                int tile = map.getMapTile(screenX + ix, screenY + iy);
+                if (tvPreview) {
+                    if (sector.tileset != mouseSector.tileset) {
+                        // This would be OOB in game, which it renders as tile 0
+                        tile = 0;
+                    }
+                    // The game renders using the current tileset/palette, not the one that the tile is in.
+                    // (Doing this even when tilesets match makes the Twoson cliff clip area look right.)
+                    sector = mouseSector;
+                }
+                int pal = TileEditor.tilesets[TileEditor
                         .getDrawTilesetNumber(sector.tileset)]
                         .getPaletteNum(sector.tileset, sector.palette);
+                Image tileImage = getTileImage(
+                        TileEditor.getDrawTilesetNumber(sector.tileset), tile, pal);
                 g.drawImage(
-                        getTileImage(TileEditor
-                                .getDrawTilesetNumber(sector.tileset), map
-                                .getMapTile(screenX + ix, screenY + iy), pal), ix
-                                * MapData.TILE_WIDTH + 1, iy
-                                * MapData.TILE_HEIGHT + 1,
+                        tileImage,
+                        ix * MapData.TILE_WIDTH + 1,
+                        iy * MapData.TILE_HEIGHT + 1,
                         MapData.TILE_WIDTH, MapData.TILE_HEIGHT, this);
                 if (drawTileNums && !gamePreview) {
                     drawNumber(g, map.getMapTile(screenX + ix, screenY + iy), ix
