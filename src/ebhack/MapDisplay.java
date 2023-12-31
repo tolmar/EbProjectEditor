@@ -541,6 +541,9 @@ public class MapDisplay extends AbstractButton implements
     }
 
     public void drawEnemyPlate(Graphics2D g, Rectangle2D rect, int mapEnemyGroupId) {
+        // Apparently setting the clip undoes whatever FrameLayout does to stop elements from drawing over
+        // each other, so we need to manually get what it was supposed to be and put it back at the end.
+        Rectangle2D screenRect = g.getClipBounds();
         MapEnemyGroup mapEnemyGroup = map.getMapEnemyGroup(mapEnemyGroupId);
         // Draw background
         g.setComposite(AlphaComposite.getInstance(
@@ -552,7 +555,7 @@ public class MapDisplay extends AbstractButton implements
 
         // Draw the enemies in a clip region so it's okay to overflow
         if (zoom >= MIN_ZOOM_TO_DISPLAY_ENEMIES) {
-            g.setClip(rect);
+            g.setClip(rect.createIntersection(screenRect));
             // Start a group
             if (!mapEnemyGroup.subGroup1.isEmpty() || mapEnemyGroup.subGroup1Rate > 0) {
                 int x = 0;
@@ -577,7 +580,7 @@ public class MapDisplay extends AbstractButton implements
                 g.setPaint(Color.white);
                 g.drawString(spawnRate, (int) (rect.getMaxX() - textBG.getWidth()), (int) rect.getY() + 48);
             }
-            g.setClip(null);
+            g.setClip(screenRect);
         }
 
         // Draw labels
@@ -1491,9 +1494,6 @@ public class MapDisplay extends AbstractButton implements
             screenHeight = newSH;
 
             setMapXYPixel(scrollX, scrollY);
-
-            setPreferredSize(new Dimension(screenWidth * MapData.TILE_WIDTH
-                    + 2, screenHeight * MapData.TILE_HEIGHT + 2));
 
             repaint();
         }
