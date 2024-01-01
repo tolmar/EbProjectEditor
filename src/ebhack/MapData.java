@@ -24,8 +24,11 @@ public class MapData {
             / SECTOR_WIDTH;
     public static final int SECTOR_WIDTH_IN_PIXELS = SECTOR_WIDTH * 32;
     public static final int SECTOR_HEIGHT_IN_PIXELS = SECTOR_HEIGHT * 32;
+    public static final int AREA_WIDTH_IN_PIXELS = SECTOR_WIDTH_IN_PIXELS;
+    public static final int AREA_HEIGHT_IN_PIXELS = 2 * SECTOR_WIDTH_IN_PIXELS;
     public static final int TILE_WIDTH = 32;
     public static final int TILE_HEIGHT = 32;
+    public static final int WIDTH_IN_PIXELS = SECTOR_WIDTH_IN_PIXELS * WIDTH_IN_SECTORS;
 
     public static final int NUM_MAP_TSETS = 32;
     public static final int NUM_DRAW_TSETS = 20;
@@ -259,6 +262,10 @@ public class MapData {
     // Other
 
     public Sector getSector(int sectorX, int sectorY) {
+        if (sectorX < 0 || sectorX >= WIDTH_IN_SECTORS
+            || sectorY < 0 || sectorY >= sectors.size()) {
+            return null;
+        }
         return sectors.get(sectorY)[sectorX];
     }
 

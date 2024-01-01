@@ -357,11 +357,11 @@ public class MapEditor extends ToolModule implements ActionListener,
 
 		// Note - xScroll / yScroll bounds get overridden later
 		xScroll = new JScrollBar(JScrollBar.HORIZONTAL, 0,
-				mapDisplay.getScreenWidth(), 0, MapData.WIDTH_IN_TILES);
+				24, 0, MapData.WIDTH_IN_TILES);
 		xScroll.addAdjustmentListener(this);
 		contentPanel.add(xScroll, BorderLayout.SOUTH);
 		yScroll = new JScrollBar(JScrollBar.VERTICAL, 0,
-				mapDisplay.getScreenHeight(), 0, 80);
+				12, 0, 80);
 		yScroll.addAdjustmentListener(this);
 		contentPanel.add(yScroll, BorderLayout.EAST);
 
@@ -939,7 +939,7 @@ public class MapEditor extends ToolModule implements ActionListener,
             final int oldX = mapDisplay.getMapX();
             final int oldY = mapDisplay.getMapY();
 
-            mapDisplay.setScreenSize(imgW, imgH);
+            mapDisplay.setScreenSize(imgW * MapData.TILE_WIDTH, imgH * MapData.TILE_HEIGHT);
             mapDisplay.setMapXY(imgX, imgY);
 
             final BufferedImage bImg = new BufferedImage(imgW * MapData.TILE_WIDTH + 2,
@@ -947,7 +947,7 @@ public class MapEditor extends ToolModule implements ActionListener,
             Graphics ig = bImg.createGraphics();
             mapDisplay.paintComponent(ig);
 
-            mapDisplay.setScreenSize(oldScreenWidth, oldScreenHeight);
+            mapDisplay.setScreenSize(oldScreenWidth * MapData.TILE_WIDTH, oldScreenHeight * MapData.TILE_HEIGHT);
             mapDisplay.setMapXY(oldX, oldY);
 
             try
